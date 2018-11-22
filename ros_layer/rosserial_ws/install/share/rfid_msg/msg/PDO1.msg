@@ -1,0 +1,11 @@
+bool tagInField
+bool codeOk
+bool xyDeviationDetermined
+bool centerPuls
+bool positionError
+bool positionEstimate
+bool fatalError
+bool antennaStarted
+float32 rfidCode
+float32 xDeviation
+float32 yDeviation

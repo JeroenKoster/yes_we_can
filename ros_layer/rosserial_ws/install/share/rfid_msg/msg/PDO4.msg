@@ -1,0 +1,14 @@
+float32 accX
+float32 accY
+float32 accZ
+bool posResult
+bool error
+bool inaccurate
+bool analysisError
+bool tdiffError
+bool speedError
+bool speedSignError
+bool speedAccelerationError
+bool posOutOfBoundsError
+bool noResultError
+bool positionResultFault

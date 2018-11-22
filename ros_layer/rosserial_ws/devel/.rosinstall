@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/marco/yes_we_can/ros_layer/rosserial_ws/devel/setup.sh
