@@ -8,3 +8,7 @@ The project is divided in 4 different subsections namely:
 - ros_layer: This folder contains the code that is used to get the data into ROS, after it has been read from the scanner
 - web_server: This folder contains the code for setting up a webserver that can serve the data, which is used for visualisations
 - visualisations: This folder contains the code to create a webpage that shows a visualisation of the can / rfid data
+- demo_app: A debug application that displays the data in PDO fields and allows the user to request SDO's through the application
+
+# Demo app:
+In order to use the demo app, first upload the receive_winforms sketch to your arduino. After this, you can run the .exe in the "executable" folder and use the app.
