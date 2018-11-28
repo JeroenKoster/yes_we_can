@@ -143,7 +143,7 @@ namespace WindowsFormsApp1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            byte[] buffer = new byte[3];
+            byte[] buffer = new byte[7];
             if (comboBox1.SelectedIndex >= 0 &&
                comboBox2.SelectedIndex >= 0 &&
                comboBox3.SelectedIndex >= 0)
@@ -151,7 +151,19 @@ namespace WindowsFormsApp1
                 buffer[0] = Convert.ToByte(comboBox1.SelectedIndex);
                 buffer[1] = Convert.ToByte(comboBox2.SelectedIndex);
                 buffer[2] = Convert.ToByte(comboBox3.SelectedIndex);
-                currentPort.Write(buffer, 0, 3);
+
+                try
+                {
+                    buffer[3] = Convert.ToByte(Convert.ToInt32("0x" + txtd1.Text, 16));
+                    buffer[4] = Convert.ToByte(Convert.ToInt32("0x" + txtd2.Text, 16));
+                    buffer[5] = Convert.ToByte(Convert.ToInt32("0x" + txtd3.Text, 16));
+                    buffer[6] = Convert.ToByte(Convert.ToInt32("0x" + txtd4.Text, 16));
+                }
+                catch (Exception ex)
+                {
+
+                }
+                currentPort.Write(buffer, 0, 7);
             }
 
         }

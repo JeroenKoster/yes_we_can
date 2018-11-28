@@ -208,7 +208,6 @@
             this.label9.Size = new System.Drawing.Size(30, 13);
             this.label9.TabIndex = 16;
             this.label9.Text = "Data";
-            this.label9.Visible = false;
             // 
             // label10
             // 
@@ -225,7 +224,6 @@
             this.txtd1.Name = "txtd1";
             this.txtd1.Size = new System.Drawing.Size(83, 20);
             this.txtd1.TabIndex = 20;
-            this.txtd1.Visible = false;
             // 
             // txtd2
             // 
@@ -233,7 +231,6 @@
             this.txtd2.Name = "txtd2";
             this.txtd2.Size = new System.Drawing.Size(83, 20);
             this.txtd2.TabIndex = 22;
-            this.txtd2.Visible = false;
             // 
             // txtd3
             // 
@@ -241,7 +238,6 @@
             this.txtd3.Name = "txtd3";
             this.txtd3.Size = new System.Drawing.Size(83, 20);
             this.txtd3.TabIndex = 23;
-            this.txtd3.Visible = false;
             // 
             // txtd4
             // 
@@ -249,7 +245,6 @@
             this.txtd4.Name = "txtd4";
             this.txtd4.Size = new System.Drawing.Size(83, 20);
             this.txtd4.TabIndex = 24;
-            this.txtd4.Visible = false;
             // 
             // txtsendresponse
             // 
@@ -372,7 +367,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "lio";
+            this.Text = "\\";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
