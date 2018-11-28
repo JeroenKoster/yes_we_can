@@ -10,5 +10,3 @@ The project is divided in 4 different subsections namely:
 - visualisations: This folder contains the code to create a webpage that shows a visualisation of the can / rfid data
 - demo_app: A debug application that displays the data in PDO fields and allows the user to request SDO's through the application
 
-# Demo app:
-In order to use the demo app, first upload the receive_winforms sketch to your arduino. After this, you can run the .exe in the "executable" folder and use the app.
