@@ -27,12 +27,18 @@ void setup()
 {
   nh.initNode();
   nh.advertise(pdo1Pub);
+  nh.advertise(pdo2Pub);
+  nh.advertise(pdo3Pub);
+  nh.advertise(pdo4Pub);
   pdo1DummyData();
 }
 
 void loop()
 {
   pdo1Pub.publish( &pdo1 );
+  pdo2Pub.publish( &pdo2 );
+  pdo3Pub.publish( &pdo3 );
+  pdo4Pub.publish( &pdo4 );
   nh.spinOnce();
-  delay(5000);
+  delay(4000);
 }
