@@ -1,5 +1,5 @@
-float32 gyroX
-float32 gyroY
-float32 gyroZ
-float32 rfidSignal1
-float32 rfidSignal2
+int16 gyroX
+int16 gyroY
+int16 gyroZ
+uint8 rfidSignal1
+uint8 rfidSignal2

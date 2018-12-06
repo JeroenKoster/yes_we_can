@@ -1,4 +1,0 @@
-float32 inductionPosition1
-float32 inductionSignal1
-float32 inductionPosition2
-float32 inductionSignal2

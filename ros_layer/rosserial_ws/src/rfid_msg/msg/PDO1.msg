@@ -6,6 +6,6 @@ bool positionError
 bool positionEstimate
 bool fatalError
 bool antennaStarted
-float32 rfidCode
-float32 xDeviation
-float32 yDeviation
+uint8[3] rfidCode
+int16 xDeviation
+int16 yDeviation

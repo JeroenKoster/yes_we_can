@@ -1,8 +1,0 @@
-prefix=/home/marco/yes_we_can/ros_layer/rosserial_ws/install
-
-Name: rfid_msg
-Description: Description of rfid_msg
-Version: 0.0.0
-Cflags: -I/home/marco/yes_we_can/ros_layer/rosserial_ws/install/include
-Libs: -L/home/marco/yes_we_can/ros_layer/rosserial_ws/install/lib 
-Requires: message_runtime

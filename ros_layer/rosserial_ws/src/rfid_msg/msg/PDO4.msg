@@ -1,6 +1,6 @@
-float32 accX
-float32 accY
-float32 accZ
+int16 accX
+int16 accY
+int16 accZ
 bool posResult
 bool error
 bool inaccurate
