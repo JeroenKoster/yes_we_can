@@ -1,3 +1,6 @@
 ros_layer/rosserial_ws/build
 ros_layer/rosserial_ws/devel
 ros_layer/rosserial_ws/install
+ros_layer/arduino_libraries/libraries/
+
+
