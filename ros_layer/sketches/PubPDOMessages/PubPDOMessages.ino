@@ -24,14 +24,6 @@ const bool CAN_ACTIVE = true;      //Set to false if the shield is not connected
 const int SPI_CS_PIN = 9;
 MCP_CAN CAN(SPI_CS_PIN);            // Set CS shield with correct pin
 
-//void pdo1DummyData()
-//{
-//  pdo1.tagInField = 1;
-//  pdo1.rfidCode = 8;
-//  pdo1.xDeviation = 32;
-//  pdo1.yDeviation = -23;
-//}
-
 void setup()
 {
   Serial.begin(9600);
@@ -41,6 +33,7 @@ void setup()
   nh.advertise(pdo3Pub);
   nh.advertise(pdo4Pub);
   //  pdo1DummyData();
+  ros::Subscriber<rfid_msg::SDO> sub("", &writeCAN);
 
   if (CAN_ACTIVE) {
     while (CAN_OK != CAN.begin(CAN_500KBPS))              // init can bus : baudrate = 500k
@@ -112,22 +105,25 @@ void readCAN() {
       pdo4.posOutOfBoundsError    =  ((1 << ++bitCount) & status);
       pdo4.noResultError          =  ((1 << ++bitCount) & status);
       pdo4.positionResultFault    =  ((1 << ++bitCount) & status);
-      
+
       pdo4Pub.publish( &pdo4 );
       break;
+    case (0x580 +nodeId):
+    case (0x600 +nodeId):
+      //This is an SDO response
+      break;
+
     default:
       break;
   }
 
 }
 
-void writeCAN() {
+void writeCAN( const std_msgs::Empty& can_msg) {
   //TODO: Read serial and send it to CAN
 }
 void loop()
 {
-
-
   if (CAN_ACTIVE) {
     if (CAN_MSGAVAIL == CAN.checkReceive())           // check if data coming
     {

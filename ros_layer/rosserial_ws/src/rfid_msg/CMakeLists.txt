@@ -55,6 +55,7 @@ find_package(catkin REQUIRED COMPONENTS
    PDO2.msg
    PDO3.msg
    PDO4.msg
+   SDO.msg
  )
 
 ## Generate services in the 'srv' folder

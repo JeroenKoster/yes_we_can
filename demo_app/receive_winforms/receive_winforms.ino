@@ -85,16 +85,18 @@ void loop()
     CAN.readMsgBuf(&len, buf);    // read data,  len: data length, buf: data buf
 
     unsigned long canId = CAN.getCanId();
-    Serial.print(canId, HEX);
+    
+    if(canId == 0x188){
+    Serial.print(canId, HEX);  
+    
     Serial.print("\t");
     for (int i = 0; i < len; i++) // print the data
     {
       Serial.print(buf[i], HEX);
       Serial.print("\t");
-    }
+    } 
     Serial.println();
-  }
-
+    }}
   if (Serial.available() == 7)
   {
     Serial.println("Received read request ");
