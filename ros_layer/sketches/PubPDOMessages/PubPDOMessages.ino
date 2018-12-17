@@ -138,72 +138,68 @@ void readCAN() {
       nh.loginfo(str);
       break;
     case (0x180 +nodeId):
-//      pdo1.tagInField             = ((1 << ++bitCount) & buf[0]);
-//      pdo1.codeOk                 = ((1 << ++bitCount) & buf[0]);
-//      pdo1.xyDeviationDetermined  = ((1 << ++bitCount) & buf[0]);
-//      pdo1.centerPuls             = ((1 << ++bitCount) & buf[0]);
-//      pdo1.positionError          = ((1 << ++bitCount) & buf[0]);
-//      pdo1.positionEstimate       = ((1 << ++bitCount) & buf[0]);
-//      pdo1.fatalError             = ((1 << ++bitCount) & buf[0]);
-//      pdo1.antennaStarted         = ((1 << ++bitCount) & buf[0]);
-//
-//      pdo1.rfidCode[0]            = buf[3];
-//      pdo1.rfidCode[1]            = buf[2];
-//      pdo1.rfidCode[2]            = buf[1];
-//
-//
-//      pdo1.xDeviation             = ((buf[4] <<= 8) + buf[5]);
-//      pdo1.yDeviation             = ((buf[8] <<= 8) + buf[7]);
-//
-//      pdo1Pub.publish( &pdo1 );
       memcpy(&pdo1struct,buf,sizeof(buf));
-      memcpy(&pdo1,pdo1struct,sizeof(pdo1struct));
+//      memcpy(&pdo1,pdo1struct,sizeof(pdo1struct));
+      pdo1.tagInField             = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.codeOk                 = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.xyDeviationDetermined  = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.centerPuls             = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.positionError          = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.positionEstimate       = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.fatalError             = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.antennaStarted         = ((1 << ++bitCount) & pdo1struct.stat;
+
+      pdo1.rfidCode[0]            = pdo1struct.code[0];
+      pdo1.rfidCode[1]            = pdo1struct.code[1];
+      pdo1.rfidCode[2]            = pdo1struct.code[2];
+
+      pdo1.xDeviation             = pdo1struct.xDev;
+      pdo1.yDeviation             = pdo1struct.yDev;
+
+      pdo1Pub.publish( &pdo1 );
       break;
     case (0x280 +nodeId):
       nh.loginfo("\tPDO2");
-
-//      pdo2.inductionPosition1   = ((buf[1] <<= 8) + buf[0]);
-//      pdo2.inductionSignal1     = ((buf[3] <<= 8) + buf[2]);
-//      pdo2.inductionPosition2   = ((buf[5] <<= 8) + buf[4]);
-//      pdo2.inductionSignal2     = ((buf[7] <<= 8) + buf[6]);
-//      pdo2Pub.publish( &pdo2 );
       memcpy(&pdo2struct,buf,sizeof(buf));
-      memcpy(&pdo2,pdo2struct,sizeof(pdo2struct));
+//      memcpy(&pdo2,pdo2struct,sizeof(pdo2struct));
+      pdo2.inductionPosition1   = pdo2struct.position1;
+      pdo2.inductionSignal1     = pdo2struct.signal1;
+      pdo2.inductionPosition2   = pdo2struct.position2;
+      pdo2.inductionSignal2     = pdo2struct.signal2;
+      pdo2Pub.publish( &pdo2 );
       break;
     case (0x380 +nodeId):
       nh.loginfo("\t\t PD03");
-
-//      pdo3.gyroX        = ((buf[1] <<= 8) + buf[0]);
-//      pdo3.gyroY        = ((buf[3] <<= 8) + buf[2]);
-//      pdo3.gyroZ        = ((buf[5] <<= 8) + buf[4]);
-//      pdo3.rfidSignal1  = ((buf[6]));
-//      pdo3.rfidSignal2  = ((buf[7]));
-//      pdo3Pub.publish( &pdo3 );
       memcpy(&pdo3struct,buf,sizeof(buf));
-      memcpy(&pdo3,pdo3struct,sizeof(pdo3struct));
+//      memcpy(&pdo3,pdo3struct,sizeof(pdo3struct));
+      pdo3.gyroX        = pdo3struct.gyroX;
+      pdo3.gyroY        = pdo3struct.gyroY;
+      pdo3.gyroZ        = pdo3struct.gyroZ;
+      pdo3.rfidSignal1  = pdo3struct.RFID_sig1;
+      pdo3.rfidSignal2  = pdo3struct.RFID_sig2;
+      pdo3Pub.publish( &pdo3 );
       break;
     case (0x480 +nodeId):
 
       nh.loginfo("\t\t\t PDO4");
-
-//      pdo4.accX                   = ((buf[1] <<= 8) + buf[0]);
-//      pdo4.accY                   = ((buf[3] <<= 8) + buf[2]);
-//      pdo4.accX                   = ((buf[5] <<= 8) + buf[4]);
-//      uint16_t status = ((buf[7] <<= 8) + buf[6]);
-//      pdo4.posResult              =  ((1 << ++bitCount) & status);
-//      pdo4.error                  =  ((1 << ++bitCount) & status);
-//      pdo4.inaccurate             =  ((1 << ++bitCount) & status);
-//      pdo4.analysisError          =  ((1 << ++bitCount) & status);
-//      pdo4.tdiffError             =  ((1 << ++bitCount) & status);
-//      pdo4.speedError             =  ((1 << ++bitCount) & status);
-//      pdo4.speedSignError         =  ((1 << ++bitCount) & status);
-//      pdo4.speedAccelerationError =  ((1 << ++bitCount) & status);
-//      pdo4.posOutOfBoundsError    =  ((1 << ++bitCount) & status);
-//      pdo4.noResultError          =  ((1 << ++bitCount) & status);
-//      pdo4.positionResultFault    =  ((1 << ++bitCount) & status);
-//      pdo4Pub.publish( &pdo4 );
       memcpy(&pdo4struct,buf,sizeof(buf));
-      memcpy(&pdo4,pdo4struct,sizeof(pdo4struct));
+//      memcpy(&pdo4,pdo4struct,sizeof(pdo4struct));
+      pdo4.accX                   = pdo4struct.accX;
+      pdo4.accY                   = pdo4struct.accY;
+      pdo4.accX                   = pdo4struct.accZ;
+      uint16_t status             = pdo4struct.RFIDerror;
+      pdo4.posResult              =  ((1 << ++bitCount) & status);
+      pdo4.error                  =  ((1 << ++bitCount) & status);
+      pdo4.inaccurate             =  ((1 << ++bitCount) & status);
+      pdo4.analysisError          =  ((1 << ++bitCount) & status);
+      pdo4.tdiffError             =  ((1 << ++bitCount) & status);
+      pdo4.speedError             =  ((1 << ++bitCount) & status);
+      pdo4.speedSignError         =  ((1 << ++bitCount) & status);
+      pdo4.speedAccelerationError =  ((1 << ++bitCount) & status);
+      pdo4.posOutOfBoundsError    =  ((1 << ++bitCount) & status);
+      pdo4.noResultError          =  ((1 << ++bitCount) & status);
+      pdo4.positionResultFault    =  ((1 << ++bitCount) & status);
+      pdo4Pub.publish( &pdo4 );
       break;
   }
   nh.loginfo("Done");
