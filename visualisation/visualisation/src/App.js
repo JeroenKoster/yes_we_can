@@ -14,6 +14,16 @@ class App extends Component {
 
         // Set the state directly. Use props if necessary.
         this.state = {
+            flags: {
+                tagInField: false,
+                codeOk: false,
+                xyDeviationDetermined: false,
+                centerPuls: false,
+                positionError: false,
+                positionEstimate: false,
+                fatalError: false,
+                antennaStarted: false
+            },
             xyData: [],
             code: -1
         }
@@ -33,7 +43,20 @@ class App extends Component {
             } else {
                 xy = [{x: result.xDeviation, y: result.yDeviation}];
             }
-            return {code: code, xyData: xy};
+            return {
+                code: code, 
+                xyData: xy, 
+                flags: {
+                    tagInField: result.tagInField,
+                    codeOk: result.codeOk,
+                    xyDeviationDetermined: result.xyDeviationDetermined,
+                    centerPuls: result.centerPuls,
+                    positionError: result.positionError,
+                    positionEstimate: result.positionEstimate,
+                    fatalError: result.fatalError,
+                    antennaStarted: result.antennaStarted
+                }
+            };
         });
     }
 
@@ -54,6 +77,11 @@ class App extends Component {
                     </p>
                 </header>
                 <div height={100}>
+                {Object.keys(this.state.flags).map((key, i) => (
+                    <li>
+                        <h3>{key + " " + this.state.flags[key]}</h3>
+                    </li>
+                ))}
                 <VictoryChart
                         width={400}
                         height={250}
