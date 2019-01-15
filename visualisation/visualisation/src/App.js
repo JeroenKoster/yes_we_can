@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import SDO from './Components/SDO';
 import {VictoryScatter, VictoryChart, VictoryTheme} from 'victory';
 import * as d3 from 'd3';
 import Websocket from 'react-websocket';
+import {CssBaseline, Select, Button} from '@material-ui/core/';
 
+const URL = "ws://localhost:3030";
 
 class App extends Component {
+
+    ws = new WebSocket(URL);
 
     constructor(props) {
         // Required step: always call the parent class' constructor
@@ -61,27 +66,44 @@ class App extends Component {
     }
 
     componentDidMount() {
-        
+        this.ws.onopen = () => {
+            // on connecting, do nothing but log it to the console
+            console.log('connected')
+        };
+
+        this.ws.onmessage = evt => {
+            // on receiving a message, add it to the list of messages
+            this.handleData(evt.data);
+        };
+
+        this.ws.onclose = () => {
+            console.log('disconnected')
+            // automatically try to reconnect on connection loss
+            this.setState({
+                ws: new WebSocket(URL),
+            })
+        }
     }
 
     componentWillUnmount() {
 
     }
 
+
     render() {
         return (
             <div className="App">
-                <header className="App-header">
-                    <p>
-                        <h2>RFID-antenna visualisation</h2>
-                    </p>
-                </header>
+                <CssBaseline />
                 <div height={100}>
-                {Object.keys(this.state.flags).map((key, i) => (
-                    <li>
-                        <h3>{key + " " + this.state.flags[key]}</h3>
-                    </li>
-                ))}
+                <SDO submit={data => {
+                    console.log("About to send " + JSON.stringify(data)+ " to WS server");
+                    this.ws.send(data)
+                }}/>
+                {/*{Object.keys(this.state.flags).map((key, i) => (*/}
+                    {/*<li>*/}
+                        {/*<h3>{key + " " + this.state.flags[key]}</h3>*/}
+                    {/*</li>*/}
+                {/*))}*/}
                 <VictoryChart
                         width={400}
                         height={250}
@@ -103,7 +125,6 @@ class App extends Component {
                         size={(d) => d.eventKey === (this.state.xyData.length -1) ? 7 : 3}
                         data={this.state.xyData}
                     />
-                    <Websocket url='ws://localhost:8080' onMessage={this.handleData.bind(this)}/>
                 </VictoryChart>
                 </div>
             </div>
