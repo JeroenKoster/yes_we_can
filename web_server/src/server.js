@@ -29,24 +29,46 @@ const rfid_msg = rosnodejs.require('rfid_msg').msg;
 
 // Set up a websocket server
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
-
+const wss = new WebSocket.Server({ port: 3030 });
+var rosNodeHandle;
+var subHandle;
+var pubHandle;
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+	console.log('received: %s', message);	
+	message = JSON.parse(message);
+	
+	talker(message.sdo, message.number);
   });
 
   ws.send('ws connection opened');
 });
 
+function talker(pdo, value){
+	switch(pdo){
+		case "PROGRAM_TAG":
+		const sdomsg = new rfid_msg.SDO(); 
+		sdomsg.command = 0x23;
+		sdomsg.index = 0x2050;
+		sdomsg.subIndex = 0x01;
+		sdomsg.data = value;
+		pubHandle.publish(sdomsg);
+		rosnodejs.log.info("You wanna program a tag");	
+		break;
+	}
+	//Ombouwen naar CAN	
+	//pubHandle.publish(message);
+	//rosnodejs.log.info("I said: " + message);	
+}
 // Create ROS listener that echo's the data to each websocket connection
-function listener() {
+function initRosNode() {
   // Register node with ROS master
   rosnodejs.initNode('/listener_node')
     .then((rosNode) => {
-      // Create ROS subscriber on the 'PDO1' topic expecting JSON data
-      let sub = rosNode.subscribe('/PDO1', rfid_msg.PDO1,
-        (data) => { // define callback execution
+      rosNodeHandle = rosNode;						//Store the handle for later reference
+      pubHandle = rosNodeHandle.advertise('/SDOreq', rfid_msg.SDO);	//Let ros master know that i Advertise SDO
+      subHandle = rosNode.subscribe('/PDO1', rfid_msg.PDO1,		//Subscribe to PDO1
+        (data) => { 							// define callback execution
           rosnodejs.log.info('I heard: [' + data + ']');
           wss.clients.forEach(function each(ws) {
             ws.send(JSON.stringify(data));
@@ -58,5 +80,6 @@ function listener() {
 
 if (require.main === module) {
   // Invoke Main Listener Function
-  listener();
+  initRosNode();
+
 }

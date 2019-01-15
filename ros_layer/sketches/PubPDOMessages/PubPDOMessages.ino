@@ -59,21 +59,21 @@ typedef struct PDO4struct {
   unsigned short int RFIDerror;
 };
 
-PDO1struct pdo1s;
-PDO2struct pdo2s;
-PDO3struct pdo3s;
-PDO4struct pdo4s;
+PDO1struct pdo1struct;
+PDO2struct pdo2struct;
+PDO3struct pdo3struct;
+PDO4struct pdo4struct;
 
 void writeCAN( const rfid_msg::SDO& can_msg) {
   //TODO: Read serial and send it to CAN
   digitalWrite(13, HIGH - digitalRead(13)); // blink the led
 
   unsigned char stmp[8] = {can_msg.command, can_msg.index & 0xff, (can_msg.index >> 8) & 0xff, can_msg.subIndex};
-  char log_msg[50];
-  //  sprintf(log_msg, "cmd: %02X ab: %02X cd: %02X sub: %02X", (int)can_msg.command, ab, cd, can_msg.subIndex);
-  //  nh.loginfo(log_msg);
+  char log_msg[50]; 
+  sprintf(log_msg, "SDORE Q cmd: %02X ab: %02X /cd: %02X sub: %02X, data: %08x", (int)can_msg.command, can_msg.index, can_msg.index >> 8, can_msg.subIndex, can_msg.data);
+  nh.loginfo(log_msg);
   CAN.sendMsgBuf(0x600, 0, 8, stmp);
-  sdoPub.publish(&can_msg);
+  //sdoPub.publish(&can_msg);   //No need to echo it back.
 }
 
 ros::Subscriber<rfid_msg::SDO> sub("SDOreq", &writeCAN );
@@ -104,7 +104,9 @@ void readCAN() {
   CAN.readMsgBuf(&len, buf);    // read data,  len: data length, buf: data buf
 
   unsigned long canId = CAN.getCanId();
-
+  char str[50];
+  sprintf(str, "CanID: %02X", canId); 
+  nh.loginfo(str);
   switch (canId) {
     case (0x580 + nodeId):
     case (0x600 + nodeId):
@@ -112,8 +114,8 @@ void readCAN() {
     case (0x600):
       nh.loginfo("\t\t\t\t 0x580 or 0x600");
       
-      char dstr[50];
-      sprintf(dstr, "%02X\t%02X\t%02X\t%02X\t%02X\t%02X\t%02X\t%02X\t", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5],buf[6],buf[7]); 
+      char dstr[60];
+      sprintf(dstr, "SDORE S %02X\t%02X\t%02X\t%02X\t%02X\t%02X\t%02X\t%02X\t", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5],buf[6],buf[7]); 
       nh.loginfo(dstr);
       
       //This is an SDO response
@@ -141,13 +143,13 @@ void readCAN() {
       memcpy(&pdo1struct,buf,sizeof(buf));
 //      memcpy(&pdo1,pdo1struct,sizeof(pdo1struct));
       pdo1.tagInField             = ((1 << ++bitCount) & pdo1struct.stat);
-      pdo1.codeOk                 = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.xyDeviationDetermined  = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.centerPuls             = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.positionError          = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.positionEstimate       = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.fatalError             = ((1 << ++bitCount) & pdo1struct.stat;
-      pdo1.antennaStarted         = ((1 << ++bitCount) & pdo1struct.stat;
+      pdo1.codeOk                 = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.xyDeviationDetermined  = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.centerPuls             = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.positionError          = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.positionEstimate       = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.fatalError             = ((1 << ++bitCount) & pdo1struct.stat);
+      pdo1.antennaStarted         = ((1 << ++bitCount) & pdo1struct.stat);
 
       pdo1.rfidCode[0]            = pdo1struct.code[0];
       pdo1.rfidCode[1]            = pdo1struct.code[1];
@@ -215,7 +217,7 @@ void loop()
       readCAN();
     }
   }
-  delay(100);
+//  delay(100);
 
   nh.spinOnce();
 }

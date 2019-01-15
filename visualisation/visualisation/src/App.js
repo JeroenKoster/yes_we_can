@@ -97,7 +97,7 @@ class App extends Component {
                 <div height={100}>
                 <SDO submit={data => {
                     console.log("About to send " + JSON.stringify(data)+ " to WS server");
-                    this.ws.send(data)
+                    this.ws.send(JSON.stringify(data))
                 }}/>
                 {/*{Object.keys(this.state.flags).map((key, i) => (*/}
                     {/*<li>*/}
