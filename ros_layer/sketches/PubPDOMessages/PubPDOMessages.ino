@@ -68,11 +68,11 @@ void writeCAN( const rfid_msg::SDO& can_msg) {
   //TODO: Read serial and send it to CAN
   digitalWrite(13, HIGH - digitalRead(13)); // blink the led
 
-  unsigned char stmp[8] = {can_msg.command, can_msg.index & 0xff, (can_msg.index >> 8) & 0xff, can_msg.subIndex};
+  unsigned char stmp[8] = {can_msg.command, can_msg.index & 0xff, (can_msg.index >> 8) & 0xff, can_msg.subIndex, can_msg.data,  (can_msg.data >> 8) & 0xff, (can_msg.data >> 16) & 0xff, (can_msg.data >> 24) & 0xff};// can_msg.data, can_msg.data >> 8, can_msg.data >> 16, can_msg.data >> 24};
   char log_msg[50]; 
-  sprintf(log_msg, "SDORE Q cmd: %02X ab: %02X /cd: %02X sub: %02X, data: %08x", (int)can_msg.command, can_msg.index, can_msg.index >> 8, can_msg.subIndex, can_msg.data);
+  sprintf(log_msg, "SDORE Q cmd: %02x %02x %02x %02x %02x %02x %02x %02x", stmp[0],stmp[1],stmp[2],stmp[3],stmp[4],stmp[5],stmp[6],stmp[7]);
   nh.loginfo(log_msg);
-  CAN.sendMsgBuf(0x600, 0, 8, stmp);
+  CAN.sendMsgBuf(0x608, 0, 8, stmp);
   //sdoPub.publish(&can_msg);   //No need to echo it back.
 }
 
@@ -128,7 +128,7 @@ void readCAN() {
       
       sdoPubMsg.data *= 256 ;
       sdoPubMsg.data += buf[5];
-      sdoPubMsg.data *= 256 ;
+        sdoPubMsg.data *= 256 ;
       sdoPubMsg.data += buf[6];
       sdoPubMsg.data *= 256 ;
       sdoPubMsg.data += buf[7];
@@ -142,6 +142,7 @@ void readCAN() {
     case (0x180 +nodeId):
       memcpy(&pdo1struct,buf,sizeof(buf));
 //      memcpy(&pdo1,pdo1struct,sizeof(pdo1struct));
+      nh.loginfo("\t\t\t\t PDO1 **********");
       pdo1.tagInField             = ((1 << ++bitCount) & pdo1struct.stat);
       pdo1.codeOk                 = ((1 << ++bitCount) & pdo1struct.stat);
       pdo1.xyDeviationDetermined  = ((1 << ++bitCount) & pdo1struct.stat);

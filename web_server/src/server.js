@@ -33,6 +33,7 @@ const wss = new WebSocket.Server({ port: 3030 });
 var rosNodeHandle;
 var subHandle;
 var pubHandle;
+var subPdo3Handle;
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
 	console.log('received: %s', message);	
@@ -45,15 +46,23 @@ wss.on('connection', function connection(ws) {
 });
 
 function talker(pdo, value){
+		const sdomsg = new rfid_msg.SDO(); 
 	switch(pdo){
 		case "PROGRAM_TAG":
-		const sdomsg = new rfid_msg.SDO(); 
 		sdomsg.command = 0x23;
-		sdomsg.index = 0x2050;
+		sdomsg.index = 0x2000;
 		sdomsg.subIndex = 0x01;
 		sdomsg.data = value;
 		pubHandle.publish(sdomsg);
 		rosnodejs.log.info("You wanna program a tag");	
+		break;
+	case "SET_SPEED":
+		sdomsg.command = 0x40;
+		sdomsg.index = 0x2000;
+		sdomsg.subIndex = 0x01;
+		sdomsg.data = value;
+		pubHandle.publish(sdomsg);
+		rosnodejs.log.info("You wanna read a tag");	
 		break;
 	}
 	//Ombouwen naar CAN	
@@ -71,10 +80,19 @@ function initRosNode() {
         (data) => { 							// define callback execution
           rosnodejs.log.info('I heard: [' + data + ']');
           wss.clients.forEach(function each(ws) {
-            ws.send(JSON.stringify(data));
-          });
+			  ws.send(JSON.stringify({"type": "PDO1", data: data}));
+
+		  });
         }
-      )
+      ).
+		  subHandle = rosNode.subscribe('/PDO3', rfid_msg.PDO3,		//Subscribe to PDO3
+		  (data) => { 							// define callback execution
+			  rosnodejs.log.info('I heard: [' + data + ']');
+			  wss.clients.forEach(function each(ws) {
+				  ws.send(JSON.stringify({"type": "PDO3", data: data}));
+			  });
+		  }
+	  )
     });
 }
 
