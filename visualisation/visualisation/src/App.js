@@ -6,6 +6,7 @@ import {VictoryScatter, VictoryChart, VictoryTheme} from 'victory';
 import * as d3 from 'd3';
 import Websocket from 'react-websocket';
 import {CssBaseline, Select, Button} from '@material-ui/core/';
+
 const MAXPOINTS = 150;
 const URL = "ws://localhost:3030";
 
@@ -40,7 +41,7 @@ class App extends Component {
         var yDev = result.yDeviation;
         var code = result.rfidCode.data[0];
         console.log("X: " + xDev + ",Y: " + yDev + ", CODE: " + code);
-        
+
         this.setState((prevState) => {
             var xy = prevState.xyData;
             if (code == prevState.code) {
@@ -49,8 +50,8 @@ class App extends Component {
                 xy = [{x: result.xDeviation, y: result.yDeviation}];
             }
             return {
-                code: code, 
-                xyData: xy, 
+                code: code,
+                xyData: xy,
                 flags: {
                     tagInField: result.tagInField,
                     codeOk: result.codeOk,
@@ -76,33 +77,34 @@ class App extends Component {
             // but only if the type is PDO1.
             // PDO3 should plot a graph.
             var json;
-            try{
+            try {
                 json = JSON.parse(evt.data);
             } catch {
                 json = evt.data;
             }
-            if(json.type === "PDO1"){
+            if (json.type === "PDO1") {
                 this.handleData(JSON.stringify(json.data));
-            } else if(json.type === "PDO3"){
-                if(typeof(window.myLine) !== "undefined"){
+            } else if (json.type === "PDO3") {
+                if (typeof (window.myLine) !== "undefined") {
                     var d = new Date();
                     var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
                     window.myLine.config.data.labels.push(time);
 
-                    if(window.myLine.config.data.labels.length > MAXPOINTS)
+                    if (window.myLine.config.data.labels.length > MAXPOINTS)
                         window.myLine.config.data.labels.shift();
 
-                    if(window.myLine.data.datasets[0].data.length > MAXPOINTS)
+                    if (window.myLine.data.datasets[0].data.length > MAXPOINTS)
                         window.myLine.data.datasets[0].data.shift();
 
-                    if(window.myLine.data.datasets[1].data.length > MAXPOINTS)
+                    if (window.myLine.data.datasets[1].data.length > MAXPOINTS)
                         window.myLine.data.datasets[1].data.shift();
 
                     window.myLine.data.datasets[0].data.push(json.data.rfidSignal1); //Antenna 1
                     window.myLine.data.datasets[1].data.push(json.data.rfidSignal2); //Antenna 2
                     window.myLine.update();
                 }
-
+            } else if (json.type === "SDO") {
+                console.log(json);
             }
         };
 
@@ -123,39 +125,39 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <CssBaseline />
+                <CssBaseline/>
                 <div height={100}>
-                <SDO submit={data => {
-                    console.log("About to send " + JSON.stringify(data)+ " to WS server");
-                    this.ws.send(JSON.stringify(data))
-                }}/>
-                {/*{Object.keys(this.state.flags).map((key, i) => (*/}
+                    <SDO submit={data => {
+                        console.log("About to send " + JSON.stringify(data) + " to WS server");
+                        this.ws.send(JSON.stringify(data))
+                    }}/>
+                    {/*{Object.keys(this.state.flags).map((key, i) => (*/}
                     {/*<li>*/}
-                        {/*<h3>{key + " " + this.state.flags[key]}</h3>*/}
+                    {/*<h3>{key + " " + this.state.flags[key]}</h3>*/}
                     {/*</li>*/}
-                {/*))}*/}
-                <VictoryChart
+                    {/*))}*/}
+                    <VictoryChart
                         width={400}
                         height={250}
                         standalone={true}
                         theme={VictoryTheme.material}
                         domain={{x: [-175, 175], y: [-100, 100]}}
                     >
-                    <VictoryScatter
-                        animate={{ 
-                            onEnter: {
-                                duration: 1000,
-                                before: () => ({ opacity: 0.3 }),
-                                after: (datum) => ({ opacity: 1 })
-                            } 
-                        }}
-                        style={{
-                            data:{fill: (d) => d.eventKey === (this.state.xyData.length -1) ? "red" : "black"}
-                        }}
-                        size={(d) => d.eventKey === (this.state.xyData.length -1) ? 7 : 3}
-                        data={this.state.xyData}
-                    />
-                </VictoryChart>
+                        <VictoryScatter
+                            animate={{
+                                onEnter: {
+                                    duration: 1000,
+                                    before: () => ({opacity: 0.3}),
+                                    after: (datum) => ({opacity: 1})
+                                }
+                            }}
+                            style={{
+                                data: {fill: (d) => d.eventKey === (this.state.xyData.length - 1) ? "red" : "black"}
+                            }}
+                            size={(d) => d.eventKey === (this.state.xyData.length - 1) ? 7 : 3}
+                            data={this.state.xyData}
+                        />
+                    </VictoryChart>
                 </div>
             </div>
         );

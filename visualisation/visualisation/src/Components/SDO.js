@@ -21,7 +21,8 @@ import {Grid, Card, CardHeader, TextField, Select, Button} from '@material-ui/co
 
 const SDO_ENUM = {
     SET_SPEED: "Set Speed",
-    PROGRAM_TAG: "Program Tag"
+    PROGRAM_TAG: "Program Tag",
+    READ_SPEED: "Read speed"
 };
 
 class SDO extends Component {
