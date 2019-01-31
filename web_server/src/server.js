@@ -46,9 +46,9 @@ wss.on('connection', function connection(ws) {
     ws.send('ws connection opened');
 });
 
-function talker(pdo, value) {
+function talker(type, value) {
     const sdomsg = new rfid_msg.SDO();
-    switch (pdo) {
+    switch (type) {
         case "PROGRAM_TAG":
             sdomsg.command = 0x23;
             sdomsg.index = 0x2000;
