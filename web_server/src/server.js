@@ -40,13 +40,13 @@ wss.on('connection', function connection(ws) {
         console.log('received: %s', message);
         message = JSON.parse(message);
 
-        talker(message.sdo, message.number);
+        setSDO(message.type, message.number);
     });
 
     ws.send('ws connection opened');
 });
 
-function talker(type, value) {
+function setSDO(type, value) {
     const sdomsg = new rfid_msg.SDO();
     switch (type) {
         case "PROGRAM_TAG":
