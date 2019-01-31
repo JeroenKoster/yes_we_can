@@ -48,8 +48,8 @@ class SDO extends Component {
         console.log("handleSubmit() -> " + this.state.selection + ": " + this.state.value);
         this.props.submit(
             {
-                sdo: this.state.selection,
-                number: this.state.value}
+                type: this.state.selection,
+                value: this.state.value}
             )
     }
 
