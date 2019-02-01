@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SDO from './Components/SDO';
 import ErrorFlags from './Components/ErrorFlags';
-
 import {VictoryScatter, VictoryChart, VictoryTheme} from 'victory';
-import * as d3 from 'd3';
-import Websocket from 'react-websocket';
 import {Grid, Paper, Button} from '@material-ui/core/';
 import {withStyles} from '@material-ui/core/styles';
 
@@ -139,19 +135,20 @@ class App extends Component {
               />
             </Paper>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Paper className={classes.paper}>
               <ErrorFlags
                 flags={this.state.flags}
               />
             </Paper>
           </Grid>
-          <Grid item xs={9}>
-            <Paper className={classes.paper}>
+          <Grid item xs={8}>
+            <Paper className={classes.paper} >
+              <svg viewBox="0 0 400 250" height={400}>
               < VictoryChart
                 width={400}
                 height={250}
-                standalone={true}
+                standalone={false}
                 theme={VictoryTheme.material}
                 domain={{
                   x: [-175, 175],
@@ -179,6 +176,7 @@ class App extends Component {
                   data={this.state.xyData}
                 />
               </VictoryChart>
+              </svg>
             </Paper>
           </Grid>
         </Grid>
