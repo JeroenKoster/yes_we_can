@@ -4,6 +4,8 @@ import {withStyles} from '@material-ui/core/styles';
 import { List, ListSubheader, ListItem, ListItemIcon ,ListItemText, Paper } from '@material-ui/core';
 import ErrorOutlineRounded from '@material-ui/icons/ErrorOutlineRounded';
 import DoneOutlined from '@material-ui/icons/DoneOutlined';
+import red from '@material-ui/core/colors/red';
+import green from '@material-ui/core/colors/green';
 
 const styles = theme => ({
   root: {
@@ -39,10 +41,11 @@ class NestedList extends React.Component {
             Object.keys(flags).map((key) => {
               return (
                 <ListItem button>
-                  <ListItemIcon>
-                    { flags[key] ? (<DoneOutlined/>) : (<ErrorOutlineRounded/>) }
-                  </ListItemIcon>
+
                   <ListItemText inset primary={key}/>
+                  <ListItemIcon>
+                    { flags[key] ? (<DoneOutlined/>) : (null) }
+                  </ListItemIcon>
                 </ListItem>
               )
             })
