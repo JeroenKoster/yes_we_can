@@ -34,6 +34,10 @@ class App extends Component {
     }
   }
 
+  /**
+   * Handles incoming Data Objects and puts the data into local state
+   * @param data = An Object representing the data in PDO1
+   */
   handleData(data) {
     let result = JSON.parse(data);
     var xDev = result.xDeviation;
@@ -83,7 +87,7 @@ class App extends Component {
             }
             if (json.type === "PDO1") {
                 this.handleData(JSON.stringify(json.data));
-            } else if (json.type === "PDO3") {
+            } else if (json.type === "PDO3") { // The PDO3 raw antenna data isn't used by react, but is used in index.html
                 if (typeof (window.myLine) !== "undefined") {
                     var d = new Date();
                     var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
@@ -102,7 +106,7 @@ class App extends Component {
                     window.myLine.data.datasets[1].data.push(json.data.rfidSignal2); //Antenna 2
                     window.myLine.update();
                 }
-            } else if (json.type === "SDO") {
+            } else if (json.type === "SDO") { // These messages are the responses to an SDO read/write request
                 console.log(json);
             }
         };
