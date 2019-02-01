@@ -10,15 +10,16 @@ import Websocket from 'react-websocket';
 import {Grid, Paper, Button} from '@material-ui/core/';
 import {withStyles} from '@material-ui/core/styles';
 
+const MAXPOINTS = 150;
 const URL = "ws://localhost:3030";
 
 class App extends Component {
 
-  ws = new WebSocket(URL);
+    ws = new WebSocket(URL);
 
-  constructor(props) {
-    // Required step: always call the parent class' constructor
-    super(props);
+    constructor(props) {
+        // Required step: always call the parent class' constructor
+        super(props);
 
     // Set the state directly. Use props if necessary.
     this.state = {
@@ -68,29 +69,57 @@ class App extends Component {
     });
   }
 
-  componentDidMount() {
-    this.ws.onopen = () => {
-      // on connecting, do nothing but log it to the console
-      console.log('connected')
-    };
+    componentDidMount() {
+        this.ws.onopen = () => {
+            // on connecting, do nothing but log it to the console
+            console.log('connected')
+        };
 
-    this.ws.onmessage = evt => {
-      // on receiving a message, add it to the list of messages
-      this.handleData(evt.data);
-    };
+        this.ws.onmessage = evt => {
+            // on receiving a message, add it to the list of messages
+            // but only if the type is PDO1.
+            // PDO3 should plot a graph.
+            var json;
+            try {
+                json = JSON.parse(evt.data);
+            } catch {
+                json = evt.data;
+            }
+            if (json.type === "PDO1") {
+                this.handleData(JSON.stringify(json.data));
+            } else if (json.type === "PDO3") {
+                if (typeof (window.myLine) !== "undefined") {
+                    var d = new Date();
+                    var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+                    window.myLine.config.data.labels.push(time);
 
-    this.ws.onclose = () => {
-      console.log('disconnected')
-      // automatically try to reconnect on connection loss
-      this.setState({
-        ws: new WebSocket(URL),
-      })
+                    if (window.myLine.config.data.labels.length > MAXPOINTS)
+                        window.myLine.config.data.labels.shift();
+
+                    if (window.myLine.data.datasets[0].data.length > MAXPOINTS)
+                        window.myLine.data.datasets[0].data.shift();
+
+                    if (window.myLine.data.datasets[1].data.length > MAXPOINTS)
+                        window.myLine.data.datasets[1].data.shift();
+
+                    window.myLine.data.datasets[0].data.push(json.data.rfidSignal1); //Antenna 1
+                    window.myLine.data.datasets[1].data.push(json.data.rfidSignal2); //Antenna 2
+                    window.myLine.update();
+                }
+            } else if (json.type === "SDO") {
+                console.log(json);
+            }
+        };
+
+        this.ws.onclose = () => {
+            console.log('disconnected')
+            // automatically try to reconnect on connection loss
+            this.setState({
+                ws: new WebSocket(URL),
+            })
+        }
     }
-  }
 
-  componentWillUnmount() {
-
-  }
 
 
   render() {

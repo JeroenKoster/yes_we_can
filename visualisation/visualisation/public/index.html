@@ -7,6 +7,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <script src="https://www.chartjs.org/dist/2.7.3/Chart.bundle.js"></script>
+    <script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+
     <meta name="theme-color" content="#000000" />
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -26,7 +29,10 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
     <div id="root"></div>
+    <canvas id="canvas" width="1800" height="400"></canvas>
+
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -38,4 +44,64 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+<script>
+
+  var config = {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Antenna 1',
+        backgroundColor: window.chartColors.red,
+        borderColor: window.chartColors.red,
+        data: [
+        ],
+        fill: false,
+      }, {
+        label: 'Antenna 2',
+        fill: false,
+        backgroundColor: window.chartColors.blue,
+        borderColor: window.chartColors.blue,
+        data: [
+        ],
+      }]
+    },
+    options: {
+      responsive: false,
+      title: {
+        display: true,
+        text: 'Signal level'
+      },
+      scales: {
+        xAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Timestamp'
+          }
+        }],
+        yAxes: [{
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Signal level / 2'
+          },
+          ticks: {
+            min: 0,
+            max: 300
+          }
+        }]
+      }
+    }
+  };
+
+  window.onload = function() {
+    var ctx = document.getElementById('canvas').getContext('2d');
+    window.myLine = new Chart(ctx, config);
+  };
+
+
+  var colorNames = Object.keys(window.chartColors);
+
+</script>
 </html>

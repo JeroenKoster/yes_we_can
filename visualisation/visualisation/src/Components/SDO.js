@@ -21,7 +21,8 @@ import {Grid, Paper, CardHeader, TextField, Select, Button} from '@material-ui/c
 
 const SDO_ENUM = {
     SET_SPEED: "Set Speed",
-    PROGRAM_TAG: "Program Tag"
+    PROGRAM_TAG: "Program Tag",
+    READ_SPEED: "Read speed"
 };
 
 class SDO extends Component {
@@ -47,8 +48,8 @@ class SDO extends Component {
         console.log("handleSubmit() -> " + this.state.selection + ": " + this.state.value);
         this.props.submit(
             {
-                sdo: this.state.selection,
-                number: this.state.value}
+                type: this.state.selection,
+                value: this.state.value}
             )
     }
 
