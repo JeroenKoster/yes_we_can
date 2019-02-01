@@ -1,23 +1,6 @@
 import React, {Component} from 'react';
 
 import {Grid, Paper, CardHeader, TextField, Select, Button} from '@material-ui/core/';
-//
-// const SDO_ENUM = Object.freeze({
-//     SET_SPEED: {
-//         description: "Set Speed",
-//         index: 0x2050,
-//         subIndex: 0x01,
-//         bits: 32,
-//         signed: true
-//     },
-//     PROGRAM_TAG: {
-//         description: "Program Tag",
-//         index: 0x2000,
-//         subIndex: 0x01,
-//         bits: 32,
-//         signed: false
-//     }
-// });
 
 const SDO_ENUM = {
     SET_SPEED: "Set Speed",
@@ -61,7 +44,6 @@ class SDO extends Component {
         return (
             <div>
                 <CardHeader
-                    title="SDO"
                     subheader="Write/Read data to the antenna"
 
                 />
