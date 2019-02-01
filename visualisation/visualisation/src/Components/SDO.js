@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Grid, Card, CardHeader, TextField, Select, Button} from '@material-ui/core/';
+import {Grid, Paper, CardHeader, TextField, Select, Button} from '@material-ui/core/';
 //
 // const SDO_ENUM = Object.freeze({
 //     SET_SPEED: {
@@ -58,7 +58,7 @@ class SDO extends Component {
 
     render() {
         return (
-            <Card>
+            <div>
                 <CardHeader
                     title="SDO"
                     subheader="Write/Read data to the antenna"
@@ -97,7 +97,7 @@ class SDO extends Component {
                         <Button onClick={this.handleSubmit} variant="outlined" color="primary">Submit</Button>
                     </Grid>
                 </Grid>
-            </Card>
+            </div>
         );
     }
 }
