@@ -10,3 +10,7 @@ The project is divided in 4 different subsections namely:
 - visualisations: This folder contains the code to create a webpage that shows a visualisation of the can / rfid data
 - demo_app: A debug application that displays the data in PDO fields and allows the user to request SDO's through the application
 
+
+# Running
+The Roslayer, webserver and visualisation can be started by running the startAll.sh script in the main folder. 
+
